@@ -25,4 +25,10 @@ class Header < ActiveRecord::Base
     where("id" => (min..max))
   end
 
+  def self._from(email_id)
+    first = where(:email_id => email_id).where(:label => "From").first
+    return nil if first == nil
+    return (first.value == nil) ? nil : first.value
+  end
+
 end

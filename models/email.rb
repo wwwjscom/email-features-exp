@@ -31,6 +31,20 @@ class Email < ActiveRecord::Base
     self.select("mailbox").group("mailbox")
   end
 
+  # Returns whether the email was sent or received by the
+  # mailbox owner.  Can also return nil is the "From" field
+  # in the email is not present.
+  def sent_or_received?
+    last_name, first_initial = mailbox.split("-")
+    from = Header._from(id)
+
+    if from == nil
+      return nil
+    else
+      return (from[/#{last_name}.+#{first_initial}/i] != nil || from[/#{first_initial}.+#{last_name}/i] != nil) ? :sent : :received
+    end
+  end
+
   # Will return false is date is missing
   def date_time
     (self.date) ? DateTime.parse(self.date) : false
