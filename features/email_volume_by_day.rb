@@ -9,9 +9,8 @@ end
 # Reset the table
 VolumeByDay.delete_all
 
-volume = {}
-
 Email.all_mailbox_names.each do |mailbox|
+  volume = {}
   mailbox = mailbox.mailbox
   Email.where(:mailbox => mailbox).find_each do |email|
     next unless email.date_time # skip emails missing dates
