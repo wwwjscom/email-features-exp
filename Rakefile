@@ -4,7 +4,14 @@ require 'tire'
 require_relative 'configs/db'
 DB.connect
 
-# blank
+namespace :import do
+  desc "Import emails to DB from TREC format"
+  task :from_trec do
+    require_relative "import/parser"
+    TRECParser.run("../")
+  end
+end
+
 namespace :features do
   desc "Recalculate the Volume By Day"
   task :volume_by_day do
@@ -46,5 +53,15 @@ namespace :features do
     require_relative "features/words_in_body"
     WordsInBody.reset
     WordsInBody.recalc
+  end
+
+  desc "Recalculate all features"
+  task :all do
+    Rake::Task["features:volume_by_day"].execute
+    Rake::Task["features:volume_by_hour"].execute
+    Rake::Task["features:words_in_subject"].execute
+    Rake::Task["features:bytes_in_subject"].execute
+    Rake::Task["features:words_in_body"].execute
+    Rake::Task["features:bytes_in_body"].execute
   end
 end
