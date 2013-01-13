@@ -26,4 +26,11 @@ namespace :features do
     WordsInSubject.reset
     WordsInSubject.recalc
   end
+
+  desc "Recalculate the Bytes in Subjects"
+  task :bytes_in_subject do
+    require_relative "features/bytes_in_subject"
+    BytesInSubject.reset
+    BytesInSubject.recalc
+  end
 end
