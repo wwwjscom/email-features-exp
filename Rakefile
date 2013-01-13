@@ -40,4 +40,11 @@ namespace :features do
     BytesInBody.reset
     BytesInBody.recalc
   end
+
+  desc "Recalculate the Words in Body"
+  task :words_in_body do
+    require_relative "features/words_in_body"
+    WordsInBody.reset
+    WordsInBody.recalc
+  end
 end
