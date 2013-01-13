@@ -10,9 +10,9 @@ class VolumeByHour < Feature
   end
 
   def self.recalc
-    super.mailbox_names.each do |mailbox|
+    mailbox_names.each do |mailbox|
       volume = Array.new(24){{:total => 0, :sent_count => 0, :received_count => 0}}
-      super.emails_by_mailbox(mailbox) do |email|
+      emails_by_mailbox(mailbox) do |email|
         next unless email.date_time # skip emails missing dates
         v_hour = volume[email.date_time.hour]
 
@@ -30,19 +30,20 @@ class VolumeByHour < Feature
         end
       end
 
-      self.save_volume(volume)
+      self.save_volume(volume, mailbox)
     end
   end
 
   # Store the results in the database
-  def self.save_volume(volume)
+  def self.save_volume(volume, mailbox)
     volume.each_with_index do |volume_hash, hour|
-      VolumeByHour.create(:mailbox => mailbox, 
-                          :hour => hour, 
-                          :total => volume_hash[:total], 
-                          :sent_count => volume_hash[:sent_count], 
-                          :received_count => volume_hash[:received_count]
-                         )
+      VolumeByHour.create(
+        :mailbox => mailbox, 
+        :hour => hour, 
+        :total => volume_hash[:total], 
+        :sent_count => volume_hash[:sent_count], 
+        :received_count => volume_hash[:received_count]
+      )
     end
   end
 

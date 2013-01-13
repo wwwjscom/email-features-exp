@@ -11,14 +11,16 @@ class VolumeByDay < Feature
 
   # Recalculate the stats
   def self.recalc
-    super.mailbox_names.each do |mailbox|
+    mailbox_names.each do |mailbox|
       volume = {}
-      super.emails_by_mailbox(mailbox) do |email|
+      emails_by_mailbox(mailbox) do |email|
         next unless email.date_time # skip emails missing dates
+
         # Increment dates
         date = email.date_time.strftime("%Y-%m-%d")
         v_date = volume[date] ||= {:total => 0, :sent_count => 0, :received_count => 0}
         v_date[:total] += 1
+        v_date[:mailbox] ||= mailbox
 
         # Increment sent/received count
         sent_or_received = email.sent_or_received?
@@ -37,12 +39,13 @@ class VolumeByDay < Feature
 
   def self.save_volume(volume)
       volume.each do |date, volume_hash|
-        VolumeByDay.create(:mailbox => mailbox, 
-                           :date => date, 
-                           :total => volume_hash[:total], 
-                           :sent_count => volume_hash[:sent_count], 
-                           :received_count => volume_hash[:received_count]
-                          )
+        VolumeByDay.create(
+          :mailbox => volume_hash[:mailbox], 
+          :date => date, 
+          :total => volume_hash[:total], 
+          :sent_count => volume_hash[:sent_count], 
+          :received_count => volume_hash[:received_count]
+        )
       end
   end
 end
