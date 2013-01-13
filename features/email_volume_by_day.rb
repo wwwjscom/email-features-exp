@@ -6,6 +6,7 @@ class VolumeByDay < Feature
   # Reset the table
   def self.reset
     VolumeByDay.delete_all
+    reset_counter(self.table_name)
   end
 
   # Recalculate the stats

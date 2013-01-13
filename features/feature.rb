@@ -14,9 +14,12 @@ class Feature < ActiveRecord::Base
 
   # Runs the block on each mailbox supplied
   def self.emails_by_mailbox(mailbox, &block)
-      Email.where(:mailbox => mailbox).find_each do |email|
-        block.call(email)
-      end
+    Email.where(:mailbox => mailbox).find_each do |email|
+      block.call(email)
     end
+  end
+
+  def self.reset_counter(table_name)
+    `mysql -u root enron_emails -e "ALTER TABLE enron_emails.#{table_name} AUTO_INCREMENT=1;"`
   end
 end

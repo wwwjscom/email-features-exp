@@ -6,6 +6,7 @@ class VolumeByHour < Feature
   # Reset the table
   def self.reset
     VolumeByHour.delete_all
+    reset_counter(self.table_name)
   end
 
   def self.recalc

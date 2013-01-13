@@ -26,9 +26,18 @@ class Header < ActiveRecord::Base
   end
 
   def self._from(email_id)
-    first = where(:email_id => email_id).where(:label => "From").first
-    return nil if first == nil
-    return (first.value == nil) ? nil : first.value
+    _from = where(:email_id => email_id).where(:label => "From").first
+    (_from == nil) ? nil : _from.value
+  end
+
+  def self.subject_for(email_id)
+    subj = where(:label => "Subject").where(:email_id => email_id).first
+    (subj == nil) ? false : subj.value
+  end
+
+  def self.date_for(email_id)
+    _date = where(:label => "Date").where(:email_id => email_id).first
+    (_date == nil) ? false : _date.value
   end
 
 end

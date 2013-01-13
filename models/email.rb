@@ -52,11 +52,10 @@ class Email < ActiveRecord::Base
 
   # Will return false is date is missing
   def date
-    _date = self.header.where(:label => "Date").first
-    (_date) ? _date.value : false
+    Header.date_for(id)
   end
 
   def subject
-    self.header.where(:label => "Subject")
+    Header.subject_for(id)
   end
 end
