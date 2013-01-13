@@ -33,4 +33,11 @@ namespace :features do
     BytesInSubject.reset
     BytesInSubject.recalc
   end
+
+  desc "Recalculate the Bytes in Body"
+  task :bytes_in_body do
+    require_relative "features/bytes_in_body"
+    BytesInBody.reset
+    BytesInBody.recalc
+  end
 end
