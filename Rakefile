@@ -13,6 +13,24 @@ namespace :import do
 end
 
 namespace :features do
+  desc "Recalculate all features"
+  task :all do
+    Rake::Task["features:volume_by_day"].execute
+    Rake::Task["features:volume_by_hour"].execute
+    Rake::Task["features:words_in_subject"].execute
+    Rake::Task["features:bytes_in_subject"].execute
+    Rake::Task["features:words_in_body"].execute
+    Rake::Task["features:bytes_in_body"].execute
+    Rake::Task["features:attachments"].execute
+  end
+
+  desc "Recalculate attachments"
+  task :attachments do
+    require_relative "features/attachments"
+    Attachment.reset
+    Attachment.recalc
+  end
+
   desc "Recalculate the Volume By Day"
   task :volume_by_day do
     require_relative "features/email_volume_by_day"
@@ -53,15 +71,5 @@ namespace :features do
     require_relative "features/words_in_body"
     WordsInBody.reset
     WordsInBody.recalc
-  end
-
-  desc "Recalculate all features"
-  task :all do
-    Rake::Task["features:volume_by_day"].execute
-    Rake::Task["features:volume_by_hour"].execute
-    Rake::Task["features:words_in_subject"].execute
-    Rake::Task["features:bytes_in_subject"].execute
-    Rake::Task["features:words_in_body"].execute
-    Rake::Task["features:bytes_in_body"].execute
   end
 end

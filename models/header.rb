@@ -40,4 +40,26 @@ class Header < ActiveRecord::Base
     (_date == nil) ? false : _date.value
   end
 
+  def self.has_attachment?(email_id)
+    !(where(:label => "Attachment").where(:email_id => email_id).empty?)
+  end
+
+  def self.attachments(email_id)
+    attachments = []
+    where(:label => "Attachment").where(:email_id => email_id).each do |a|
+      attachment = {}
+
+      attachment[:file_name], attachment[:ext] = a.value.split("type=")[0].rpartition(/\.\w{2,3} $/)[0..1].map(&:rstrip)
+      if attachment[:file_name] == "" && attachment[:ext] == ""
+        # Fix for filenames that have no extension
+        attachment[:file_name] = a.value.split(" type=")[0]
+      end
+
+      attachment[:mime_type_major], attachment[:mime_type_minor] = a.value.split("type=")[1].split("/")
+      attachment[:email_id] = a.email_id
+      attachments << attachment
+    end
+    attachments
+  end
+
 end

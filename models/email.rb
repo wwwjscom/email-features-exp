@@ -58,4 +58,12 @@ class Email < ActiveRecord::Base
   def subject
     Header.subject_for(id)
   end
+
+  def has_attachment?
+    Header.has_attachment?(id)
+  end
+
+  def attachments
+    Header.attachments(id)
+  end
 end
