@@ -5,6 +5,14 @@ require_relative 'configs/db'
 require_relative 'models/email'
 DB.connect
 
+namespace :search do
+  desc "Run all searches for the parameterized term."
+  task :query_for, [:term]  do |t, args|
+    require_relative "querying/search"
+    Search.all_tests(args[:term])
+  end
+end
+
 namespace :import do
   desc "Import emails to DB from TREC format"
   task :from_trec do

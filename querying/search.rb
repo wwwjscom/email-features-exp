@@ -54,5 +54,3 @@ class Search
     end
   end
 end
-
-Search.all_tests("footbal")
