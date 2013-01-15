@@ -11,9 +11,23 @@ class Email < ActiveRecord::Base
 
   mapping do
     indexes :id,           :index    => :not_analyzed
+    indexes :subject,      :analyzer => 'snowball'
     indexes :body,         :analyzer => 'snowball'
-    indexes :mailbox,       :analyzer => 'keyword'
-    indexes :filename,       :analyzer => 'keyword'
+    indexes :attachment,   :analyzer => 'keyword'
+    indexes :mailbox,      :index => :not_analyzed
+    indexes :file_name,     :index => :not_analyzed
+  end
+
+  # Tighter control over the way attributes are indexed.  This
+  # control allows for adding subject and attachment to the
+  # emails index.
+  def to_indexed_json
+    { 
+      :body => body,
+      :subject => subject,
+      :attachment => (attachments.first == nil) ? "" : attachments.first[:file_name],
+      :file_name => file_name
+    }.to_json
   end
 
 

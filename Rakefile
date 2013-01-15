@@ -2,6 +2,7 @@ require 'rubygems'
 require 'rake'
 require 'tire'
 require_relative 'configs/db'
+require_relative 'models/email'
 DB.connect
 
 namespace :import do
