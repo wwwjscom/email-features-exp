@@ -1,0 +1,14 @@
+t1:
+  negative boost: subject term of 0.0 
+  positive boost: body term
+  no score alterations
+
+t2: 
+  negative boost: subject term of 0.3 
+  positive boost: body term
+  no score alterations
+
+t3: 
+  negative boost: body term of 0.3 
+  positive boost: subject term
+  no score alterations
