@@ -5,6 +5,8 @@ class Search
 
   def self.all_tests(term)
     self.t1(term)
+    self.t2(term)
+    self.t3(term)
   end
 
   def self.t1(term)
@@ -15,6 +17,28 @@ class Search
         :positive_term => term,
         :positive_field => "subject",
         :test_number => "t1"
+      }).query
+  end
+
+  def self.t2(term)
+    Search.new({
+        :negative_term => term,
+        :negative_boost => 0.3,
+        :negative_field => "subject",
+        :positive_term => term,
+        :positive_field => "body",
+        :test_number => "t2"
+      }).query
+  end
+
+  def self.t3(term)
+    Search.new({
+        :negative_term => term,
+        :negative_boost => 0.3,
+        :negative_field => "body",
+        :positive_term => term,
+        :positive_field => "subject",
+        :test_number => "t3"
       }).query
   end
 
