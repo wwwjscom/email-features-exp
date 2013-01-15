@@ -1,0 +1,3 @@
+Don't change the name or path of the results folder
+
+Don't have the tests results files be named anything other than "t##"

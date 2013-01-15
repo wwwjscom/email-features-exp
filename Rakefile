@@ -8,15 +8,17 @@ DB.connect
 namespace :search do
   desc "Run all searches for the parameterized term."
   task :query_for, [:term]  do |t, args|
+    # Clean up any old runs that may be laying around that could cause problems
+    `rm ./results/t*`
+
+    # Querying Code
     require_relative "querying/search"
     Search.all_tests(args[:term])
-  end
 
-  desc "Evaluates...TBD"
-  task :eval do
+    # Evaluator Code
     require 'date'
     require_relative "eval/evaluator"
-    dir_name = DateTime.now.strftime("%m-%d-%Y_%H:%M:%S")
+    dir_name = DateTime.now.strftime("%m-%d-%Y_%H:%M:%S__#{args[:term]}")
     Evaluator.eval(dir_name)
   end
 end
