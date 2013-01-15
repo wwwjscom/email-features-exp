@@ -11,6 +11,14 @@ namespace :search do
     require_relative "querying/search"
     Search.all_tests(args[:term])
   end
+
+  desc "Evaluates...TBD"
+  task :eval do
+    require 'date'
+    require_relative "eval/evaluator"
+    dir_name = DateTime.now.strftime("%m-%d-%Y_%H:%M:%S")
+    Evaluator.eval(dir_name)
+  end
 end
 
 namespace :import do
