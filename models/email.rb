@@ -33,6 +33,7 @@ class Email < ActiveRecord::Base
 
   self.table_name = "emails"
   has_many :header
+  has_many :attachment
 
   def self.paginate(pagination_hash)
     min = ((pagination_hash[:page]-1)*pagination_hash[:per_page])+1

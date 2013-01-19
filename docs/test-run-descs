@@ -12,3 +12,15 @@ t3:
   negative boost: body term of 0.3 
   positive boost: subject term
   no score alterations
+
+t4:
+  purpose: value emails found during odd hours more than emails during high traffic hours
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + log(t/h), t = total vol. of email for that mailbox; h = total vol of email for that hour for that mailbox
+
+t5:
+  purpose: value emails found during frequenty hours of communication instead of rare hours
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + log(h/t), t = total vol. of email for that mailbox; h = total vol of email for that hour for that mailbox
