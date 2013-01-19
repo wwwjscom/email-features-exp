@@ -1,3 +1,4 @@
+require_relative '../lib/kernel'
 require_relative '../models/email'
 require_relative '../models/header'
 require_relative 'reorder'
@@ -7,11 +8,10 @@ class Search
   attr_accessor :t_num
 
   def self.all_tests(term)
-    #@self.t1(term)
-    #@self.t2(term)
-    #@self.t3(term)
-    self.t4(term)
-    self.t5(term)
+    #self.t1(term)
+    #self.t2(term)
+    #self.t3(term)
+    self.t4_to_tn(term)
   end
 
   def self.t1(term)
@@ -21,7 +21,7 @@ class Search
         :negative_field => "body",
         :positive_term => term,
         :positive_field => "subject",
-        :test_number => "t1"
+        :test_number => this_method_name
       }).query
   end
 
@@ -32,7 +32,7 @@ class Search
         :negative_field => "subject",
         :positive_term => term,
         :positive_field => "body",
-        :test_number => "t2"
+        :test_number => this_method_name
       }).query
   end
 
@@ -43,30 +43,24 @@ class Search
         :negative_field => "body",
         :positive_term => term,
         :positive_field => "subject",
-        :test_number => "t3"
+        :test_number => this_method_name
       }).query
   end
 
-  def self.t4(term)
-    Search.new({
+  # These can be combined since we don't change the
+  # negative or positive boosting
+  def self.t4_to_tn(term)
+    (4..9).each do |i|
+      puts "[-] Setting up tests t#{i}"
+      Search.new({
         :negative_term => term,
         :negative_boost => 0.3,
         :negative_field => "body",
         :positive_term => term,
         :positive_field => "subject",
-        :test_number => "t4"
+        :test_number => "t#{i}"
       }).query(true)
-  end
-
-  def self.t5(term)
-    Search.new({
-        :negative_term => term,
-        :negative_boost => 0.3,
-        :negative_field => "body",
-        :positive_term => term,
-        :positive_field => "subject",
-        :test_number => "t5"
-      }).query(true)
+    end
   end
 
   def initialize(search_hash)
@@ -108,6 +102,7 @@ class Search
     # Resort the array by score so TREC is happy
     results.sort!{|a,b| a[:score] <=> b[:score] }.reverse!
 
+    puts "[-] Saving query results for #{@t_num}"
     File.open("./results/#{@t_num}", "w") do |file|
       results.each_with_index do |doc, i|
         file.puts "207 Q0 %s %s %s %s" % [doc[:file_name].gsub('.txt', ''), (i+1).to_s, doc[:score].to_s, doc[:email_id]]
@@ -121,7 +116,7 @@ class Search
     search.results.each_with_index do |doc, i|
       results << { 
         :file_name => search[i].file_name.gsub('.txt', ''), 
-        :score => doc._score.to_s, 
+        :score => doc._score, 
         :email_id => search[i].id
       }
     end

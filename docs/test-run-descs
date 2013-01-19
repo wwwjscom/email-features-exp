@@ -24,3 +24,27 @@ t5:
   negative boost: body term of 0.3
   positive boost: subject term
   f(r) = r + log(h/t), t = total vol. of email for that mailbox; h = total vol of email for that hour for that mailbox
+
+t6:
+  purpose: same as t4, but with day instead of hour
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + log(t/h), t = total vol. of email for that mailbox; h = total vol of email for that day for that mailbox
+
+t7:
+  purpose: same as t5, but with day instead of hour
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + log(h/t), t = total vol. of email for that mailbox; h = total vol of email for that day for that mailbox
+
+t8:
+  purpose: boost emails with attachments based on the number of attachments it has.  favor more attachments
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r * l, l = the number of attachments for this email, so long as l > 0
+
+t8:
+  purpose: opposite of t8
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r / l, l = the number of attachments for this email, so long as l > 0
