@@ -89,4 +89,12 @@ class Email < ActiveRecord::Base
   def words_in_body
     WordsInBody.for(body)
   end
+
+  def bytes_in_subject
+    BytesInSubject.for(subject)
+  end
+
+  def words_in_subject
+    WordsInSubject.for(subject)
+  end
 end

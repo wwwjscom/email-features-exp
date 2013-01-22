@@ -74,3 +74,5 @@ t13:
   f(r) = r - (l/b), l = number of bytes in this emails body; b = avg number of bytes per email body for that mailbox
 
 t14 - t17: same as t10-t13, but with body words.
+t18 - t21: same as t10-t13, but with subject bytes.
+t22 - t25: same as t10-t13, but with subject words.

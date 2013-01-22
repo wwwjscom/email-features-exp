@@ -3,6 +3,8 @@ require_relative '../models/email_volume_by_hour'
 require_relative '../models/email_volume_by_day'
 require_relative '../models/bytes_in_body'
 require_relative '../models/words_in_body'
+require_relative '../models/bytes_in_subject'
+require_relative '../models/words_in_subject'
 
 class Reorder
   def self.these(search, results)
@@ -140,6 +142,78 @@ class Reorder
     end
     results
   end
+
+  def self.t18(results)
+    each_result(results) do |r, email|
+      t18_t21_helper(email) do |avg|
+        r[:score] = r[:score].to_f + Math.log(avg)
+      end
+    end
+    results
+  end
+
+  def self.t19(results)
+    each_result(results) do |r, email|
+      t18_t21_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+    end
+    results
+  end
+
+  def self.t20(results)
+    each_result(results) do |r, email|
+      t18_t21_helper(email) do |avg, bytes_in_subject|
+        r[:score] = r[:score].to_f + (bytes_in_subject.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t21(results)
+    each_result(results) do |r, email|
+      t18_t21_helper(email) do |avg, bytes_in_subject|
+        r[:score] = r[:score].to_f - (bytes_in_subject.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t22(results)
+    each_result(results) do |r, email|
+      t22_t25_helper(email) do |avg|
+        r[:score] = r[:score].to_f + Math.log(avg)
+      end
+    end
+    results
+  end
+
+  def self.t23(results)
+    each_result(results) do |r, email|
+      t22_t25_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+    end
+    results
+  end
+
+  def self.t24(results)
+    each_result(results) do |r, email|
+      t22_t25_helper(email) do |avg, words_in_subject|
+        r[:score] = r[:score].to_f + (words_in_subject.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t25(results)
+    each_result(results) do |r, email|
+      t22_t25_helper(email) do |avg, words_in_subject|
+        r[:score] = r[:score].to_f - (words_in_subject.to_f / avg.to_f)
+      end
+    end
+    results
+  end
   
   private #---------------
 
@@ -181,6 +255,18 @@ class Reorder
     avg = WordsInBody.find_by_mailbox(email.mailbox).average
     words_in_body = email.words_in_body
     block.call(avg, words_in_body)
+  end
+  
+  def self.t18_t21_helper(email, &block)
+    avg = BytesInSubject.find_by_mailbox(email.mailbox).average
+    bytes_in_subject = email.bytes_in_subject
+    block.call(avg, bytes_in_subject)
+  end
+  
+  def self.t22_t25_helper(email, &block)
+    avg = WordsInSubject.find_by_mailbox(email.mailbox).average
+    words_in_subject = email.words_in_subject
+    block.call(avg, words_in_subject)
   end
 
 end
