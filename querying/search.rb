@@ -50,7 +50,7 @@ class Search
   # These can be combined since we don't change the
   # negative or positive boosting
   def self.t4_to_tn(term)
-    (4..9).each do |i|
+    (14..17).each do |i|
       puts "[-] Setting up tests t#{i}"
       Search.new({
         :negative_term => term,

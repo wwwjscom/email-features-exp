@@ -43,8 +43,34 @@ t8:
   positive boost: subject term
   f(r) = r * l, l = the number of attachments for this email, so long as l > 0
 
-t8:
+t9:
   purpose: opposite of t8
   negative boost: body term of 0.3
   positive boost: subject term
   f(r) = r / l, l = the number of attachments for this email, so long as l > 0
+
+t10:
+  purpose: boost emails found in mailboxes that have a high avg number of bytes per email
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + log(b), b = avg number of bytes per email body for that mailbox
+
+t11:
+  purpose: opposite of t10
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r - log(log(b)), b = avg number of bytes per email body for that mailbox
+
+t12:
+  purpose: boost emails whose bytes are higher than the avg found for that mailbox
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + (l/b), l = number of bytes in this emails body; b = avg number of bytes per email body for that mailbox
+
+t13:
+  purpose: opposite of 12
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r - (l/b), l = number of bytes in this emails body; b = avg number of bytes per email body for that mailbox
+
+t14 - t17: same as t10-t13, but with body words.

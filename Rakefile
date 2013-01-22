@@ -11,6 +11,8 @@ namespace :search do
     # Clean up any old runs that may be laying around that could cause problems
     `rm ./results/t*`
 
+    topic = "207" # FIXME: This shouldn't be hardcoded
+
     # Querying Code
     require_relative "querying/search"
     Search.all_tests(args[:term])
@@ -20,6 +22,11 @@ namespace :search do
     require_relative "eval/evaluator"
     dir_name = DateTime.now.strftime("%m-%d-%Y_%H:%M:%S__#{args[:term]}")
     Evaluator.eval(dir_name)
+
+    # Summarize
+    require_relative "summarize/summarize"
+    path = "./results/#{dir_name}"
+    Summarize.new(path,topic).summarize
   end
 end
 

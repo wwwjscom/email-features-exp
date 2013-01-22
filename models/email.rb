@@ -81,4 +81,12 @@ class Email < ActiveRecord::Base
   def attachments
     Header.attachments(id)
   end
+
+  def bytes_in_body
+    BytesInBody.for(body)
+  end
+
+  def words_in_body
+    WordsInBody.for(body)
+  end
 end

@@ -1,6 +1,8 @@
 require_relative '../models/email'
 require_relative '../models/email_volume_by_hour'
 require_relative '../models/email_volume_by_day'
+require_relative '../models/bytes_in_body'
+require_relative '../models/words_in_body'
 
 class Reorder
   def self.these(search, results)
@@ -67,6 +69,78 @@ class Reorder
     results
   end
 
+  def self.t10(results)
+    each_result(results) do |r, email|
+      t10_t13_helper(email) do |avg|
+        r[:score] = r[:score].to_f + Math.log(avg)
+      end
+    end
+    results
+  end
+
+  def self.t11(results)
+    each_result(results) do |r, email|
+      t10_t13_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+    end
+    results
+  end
+
+  def self.t12(results)
+    each_result(results) do |r, email|
+      t10_t13_helper(email) do |avg|
+        r[:score] = r[:score].to_f + (email.bytes_in_body.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t13(results)
+    each_result(results) do |r, email|
+      t10_t13_helper(email) do |avg|
+        r[:score] = r[:score].to_f - (email.bytes_in_body.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t14(results)
+    each_result(results) do |r, email|
+      t14_t17_helper(email) do |avg|
+        r[:score] = r[:score].to_f + Math.log(avg)
+      end
+    end
+    results
+  end
+
+  def self.t15(results)
+    each_result(results) do |r, email|
+      t14_t17_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+    end
+    results
+  end
+
+  def self.t16(results)
+    each_result(results) do |r, email|
+      t14_t17_helper(email) do |avg, words_in_body|
+        r[:score] = r[:score].to_f + (words_in_body.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t17(results)
+    each_result(results) do |r, email|
+      t14_t17_helper(email) do |avg, words_in_body|
+        r[:score] = r[:score].to_f - (words_in_body.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+  
   private #---------------
 
   def self.each_result(results, &block)
@@ -96,6 +170,17 @@ class Reorder
   def self.t8_t9_helper(email, &block)
       return unless email.has_attachment? # skip missing dates
       block.call
+  end
+  
+  def self.t10_t13_helper(email, &block)
+    avg = BytesInBody.find_by_mailbox(email.mailbox).average
+    block.call(avg)
+  end
+  
+  def self.t14_t17_helper(email, &block)
+    avg = WordsInBody.find_by_mailbox(email.mailbox).average
+    words_in_body = email.words_in_body
+    block.call(avg, words_in_body)
   end
 
 end
