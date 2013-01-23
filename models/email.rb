@@ -82,6 +82,14 @@ class Email < ActiveRecord::Base
     Header.subject_for(id)
   end
 
+  def is_a_reply?
+    (subject[/^re: /i]) ? true : false
+  end
+
+  def is_a_forward?
+    (subject[/^fwd: /i]) ? true : false
+  end
+
   def has_attachment?
     Header.has_attachment?(id)
   end

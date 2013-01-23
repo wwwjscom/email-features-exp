@@ -247,6 +247,38 @@ class Reorder
     results
   end
   
+  def self.t30(results)
+    each_result(results) do |r, email|
+      next unless email.is_a_reply?
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
+  def self.t31(results)
+    each_result(results) do |r, email|
+      next if email.is_a_reply?
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
+  def self.t32(results)
+    each_result(results) do |r, email|
+      next unless email.is_a_forward?
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
+  def self.t33(results)
+    each_result(results) do |r, email|
+      next if email.is_a_forward?
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
   private #---------------
 
   def self.each_result(results, &block)

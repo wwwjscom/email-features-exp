@@ -96,3 +96,19 @@ t28:
   f(r) = r + 1, if email sent by mailbox owner
 
 t29: opposite of t28
+
+t30:
+  purpose: value emails that are replies
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + 1, if email is a reply
+
+t31: opposite of t30
+
+t32:
+  purpose: value emails that are forwards
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + 1, if email is a forward
+
+t33: opposite of t32
