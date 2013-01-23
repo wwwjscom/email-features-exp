@@ -76,3 +76,15 @@ t13:
 t14 - t17: same as t10-t13, but with body words.
 t18 - t21: same as t10-t13, but with subject bytes.
 t22 - t25: same as t10-t13, but with subject words.
+
+t26:
+  purpose: value emails sent inside of the workday (9-5) window.
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + 1, if email sent between 9-5 window
+
+t26:
+  purpose: value emails sent outside of the workday (9-5) window.
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + 1, if email sent outside 9-5 window

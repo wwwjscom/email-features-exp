@@ -215,6 +215,22 @@ class Reorder
     results
   end
   
+  def self.t26(results)
+    each_result(results) do |r, email|
+      next unless (9..17).cover?(email.date_time.hour)
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
+  def self.t27(results)
+    each_result(results) do |r, email|
+      next if (9..17).cover?(email.date_time.hour)
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
   private #---------------
 
   def self.each_result(results, &block)
