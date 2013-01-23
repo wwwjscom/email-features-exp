@@ -12,7 +12,7 @@ class Reorder
   end
 
   # Reorder based on which test we're running
-  def self.t4(results)
+  def self.t04(results)
     each_result(results) do |r, email|
       t4_t5_helper(email) do |total_vol, hour_vol|
         r[:score] = r[:score].to_f + Math.log(total_vol.to_f / hour_vol.total.to_f)
@@ -21,7 +21,7 @@ class Reorder
     results
   end
 
-  def self.t5(results)
+  def self.t05(results)
     min = 9999999
     each_result(results) do |r, email|
       t4_t5_helper(email) do |total_vol, hour_vol|
@@ -35,7 +35,7 @@ class Reorder
     results
   end
 
-  def self.t6(results)
+  def self.t06(results)
     each_result(results) do |r, email|
       t6_t7_helper(email) do |total_vol, day_vol|
         r[:score] = r[:score].to_f + Math.log(total_vol.to_f / day_vol.total.to_f)
@@ -44,7 +44,7 @@ class Reorder
     results
   end
 
-  def self.t7(results)
+  def self.t07(results)
     each_result(results) do |r, email|
       t6_t7_helper(email) do |total_vol, day_vol|
         r[:score] = r[:score].to_f + Math.log(day_vol.total.to_f / total_vol.to_f)
@@ -53,7 +53,7 @@ class Reorder
     results
   end
 
-  def self.t8(results)
+  def self.t08(results)
     each_result(results) do |r, email|
       t8_t9_helper(email) do
         r[:score] = r[:score].to_f * email.attachments.size
@@ -62,7 +62,7 @@ class Reorder
     results
   end
 
-  def self.t9(results)
+  def self.t09(results)
     each_result(results) do |r, email|
       t8_t9_helper(email) do
         r[:score] = r[:score].to_f / email.attachments.size

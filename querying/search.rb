@@ -8,13 +8,13 @@ class Search
   attr_accessor :t_num
 
   def self.all_tests(term)
-    #self.t1(term)
-    #self.t2(term)
-    #self.t3(term)
+    self.t01(term)
+    self.t02(term)
+    self.t03(term)
     self.t4_to_tn(term)
   end
 
-  def self.t1(term)
+  def self.t01(term)
     Search.new({
         :negative_term => term,
         :negative_boost => 0.0,
@@ -25,7 +25,7 @@ class Search
       }).query
   end
 
-  def self.t2(term)
+  def self.t02(term)
     Search.new({
         :negative_term => term,
         :negative_boost => 0.3,
@@ -36,7 +36,7 @@ class Search
       }).query
   end
 
-  def self.t3(term)
+  def self.t03(term)
     Search.new({
         :negative_term => term,
         :negative_boost => 0.3,
@@ -50,15 +50,15 @@ class Search
   # These can be combined since we don't change the
   # negative or positive boosting
   def self.t4_to_tn(term)
-    (30..33).each do |i|
-      puts "[-] Setting up tests t#{i}"
+    (4..33).each do |i|
+      log("Setting up tests t%02d" % i)
       Search.new({
         :negative_term => term,
         :negative_boost => 0.3,
         :negative_field => "body",
         :positive_term => term,
         :positive_field => "subject",
-        :test_number => "t#{i}"
+        :test_number => "t%02d" % i
       }).query(true)
     end
   end
@@ -102,7 +102,7 @@ class Search
     # Resort the array by score so TREC is happy
     results.sort!{|a,b| a[:score] <=> b[:score] }.reverse!
 
-    puts "[-] Saving query results for #{@t_num}"
+    log "Saving query results for #{@t_num}"
     File.open("./results/#{@t_num}", "w") do |file|
       results.each_with_index do |doc, i|
         file.puts "207 Q0 %s %s %s %s" % [doc[:file_name].gsub('.txt', ''), (i+1).to_s, doc[:score].to_s, doc[:email_id]]

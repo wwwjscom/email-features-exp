@@ -3,6 +3,7 @@ require 'rake'
 require 'tire'
 require_relative 'configs/db'
 require_relative 'models/email'
+require_relative 'lib/logger'
 DB.connect
 
 namespace :search do
