@@ -231,6 +231,22 @@ class Reorder
     results
   end
   
+  def self.t28(results)
+    each_result(results) do |r, email|
+      next unless email.sent?
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
+  def self.t29(results)
+    each_result(results) do |r, email|
+      next unless email.received?
+      r[:score] = r[:score].to_f + 1.0
+    end
+    results
+  end
+  
   private #---------------
 
   def self.each_result(results, &block)

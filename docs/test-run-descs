@@ -83,8 +83,16 @@ t26:
   positive boost: subject term
   f(r) = r + 1, if email sent between 9-5 window
 
-t26:
+t27:
   purpose: value emails sent outside of the workday (9-5) window.
   negative boost: body term of 0.3
   positive boost: subject term
   f(r) = r + 1, if email sent outside 9-5 window
+
+t28:
+  purpose: value emails sent by the mailbox owner
+  negative boost: body term of 0.3
+  positive boost: subject term
+  f(r) = r + 1, if email sent by mailbox owner
+
+t29: opposite of t28

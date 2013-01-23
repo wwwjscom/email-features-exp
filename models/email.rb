@@ -46,6 +46,14 @@ class Email < ActiveRecord::Base
     self.select("mailbox").group("mailbox")
   end
 
+  def sent?
+    (sent_or_received? == :sent) ? true : false
+  end
+
+  def received?
+    (sent_or_received? == :received) ? true : false
+  end
+
   # Returns whether the email was sent or received by the
   # mailbox owner.  Can also return nil is the "From" field
   # in the email is not present.
