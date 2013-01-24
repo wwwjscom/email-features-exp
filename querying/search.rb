@@ -7,14 +7,14 @@ class Search
 
   attr_accessor :t_num
 
-  def self.all_tests(term)
-    self.t01(term)
-    self.t02(term)
-    self.t03(term)
-    self.t4_to_tn(term)
+  def self.all_tests(topic, term)
+    self.t01(topic, term)
+    #self.t02(topic, term)
+    #self.t03(topic, term)
+    #self.t4_to_tn(topic, term)
   end
 
-  def self.t01(term)
+  def self.t01(topic, term)
     Search.new({
         :negative_term => term,
         :negative_boost => 0.0,
@@ -22,10 +22,10 @@ class Search
         :positive_term => term,
         :positive_field => "subject",
         :test_number => this_method_name
-      }).query
+      }).query(topic)
   end
 
-  def self.t02(term)
+  def self.t02(topic, term)
     Search.new({
         :negative_term => term,
         :negative_boost => 0.3,
@@ -33,10 +33,10 @@ class Search
         :positive_term => term,
         :positive_field => "body",
         :test_number => this_method_name
-      }).query
+      }).query(topic)
   end
 
-  def self.t03(term)
+  def self.t03(topic, term)
     Search.new({
         :negative_term => term,
         :negative_boost => 0.3,
@@ -44,12 +44,12 @@ class Search
         :positive_term => term,
         :positive_field => "subject",
         :test_number => this_method_name
-      }).query
+      }).query(topic)
   end
 
   # These can be combined since we don't change the
   # negative or positive boosting
-  def self.t4_to_tn(term)
+  def self.t4_to_tn(topic, term)
     (4..33).each do |i|
       log("Setting up tests t%02d" % i)
       Search.new({
@@ -59,7 +59,7 @@ class Search
         :positive_term => term,
         :positive_field => "subject",
         :test_number => "t%02d" % i
-      }).query(true)
+      }).query(topic, true)
     end
   end
 
@@ -90,7 +90,7 @@ class Search
     search
   end
 
-  def query(reorder_results = false)
+  def query(topic, reorder_results = false)
     search = query_framework
 
     results = search_to_results(search)
@@ -105,7 +105,7 @@ class Search
     log "Saving query results for #{@t_num}"
     File.open("./results/#{@t_num}", "w") do |file|
       results.each_with_index do |doc, i|
-        file.puts "207 Q0 %s %s %s %s" % [doc[:file_name].gsub('.txt', ''), (i+1).to_s, doc[:score].to_s, doc[:email_id]]
+        file.puts "#{topic} Q0 %s %s %s %s" % [doc[:file_name].gsub('.txt', ''), (i+1).to_s, doc[:score].to_s, doc[:email_id]]
       end
     end
   end

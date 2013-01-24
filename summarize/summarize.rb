@@ -3,9 +3,8 @@ class Summarize
   # Path is to a results run stored in the /results folder.
   # i.e.: 
   #   results/01-15-2013_02:27:33__footbal
-  def initialize(path, topic)
+  def initialize(path)
     @path = path
-    @topic = topic
     self
   end
 
