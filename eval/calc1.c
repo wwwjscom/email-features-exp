@@ -26,7 +26,21 @@ stats(){
    int i,j,k;
    rels = 0;
    for (i=1;i<=4;i++) {
-      if (Rel[i][0] || Rel[i][1]) rels += (double)Rel[i][1]/(Rel[i][0]+Rel[i][1])*(Rel[i][-1]+Rel[i][0]+Rel[i][1]);
+     // For all the 4 different batches
+      if (Rel[i][0] || Rel[i][1]) {
+        // Take all documents that are either relevant (1) or...kinda relevant? (0)
+        // And calculate some weird fucking score...
+        // x = number of relevant (1) docs in this batch for this topic
+        // y = number of irrelevant (0) docs in this batch for this topci
+        // z = number of undecided (-1) docs in this batch for this topic
+        // x / (y + x) * (z + y + x)
+        // This somehow appears to be the 
+        //  numer of OR relevance scores
+        // calculated and stored in Rels after each doc is processed.
+        //
+        // Confirmed.  This is SOMEHOW the number of relevant documents...
+        rels += (double) Rel[i][1] / (Rel[i][0] + Rel[i][1]) * (Rel[i][-1] + Rel[i][0] + Rel[i][1]);
+      }
    }
 }
 
@@ -41,10 +55,10 @@ doit(){
       int i,j,bn=0,bnest=0;
       double P,R,F,estP,estR,estF,bF=0,bestF=0, bFest=0;
       printf("==== Topic %d ====\n",oldtop);
-      printf("Documents returned     Relevant     Nonrelevant    Estmated Rel   Estimated Non\n");
+      printf("Documents returned     Recall   Precision   F1   Nonrelevant    Estmated Rel   Estimated Non\n");
       for (i=1;i<=n;i++) {
-         P = Rels[i]/i;
-         R = Rels[i]/Rels[n];
+         P = Rels[i]/i; // Precision
+         R = Rels[i]/Rels[n]; // Recall
          F = 2/(1/P+1/R);
          estP = Estrel[i]/i;
          estR = Estrel[i]/Estrel[n];
@@ -60,9 +74,10 @@ doit(){
          }
          if (i == 10 || i == 100 || i == 1000 || i == 100000 || i == 20 || i == 200 || i == 2000 || i == 20000
                 || i == 200000|| i == 500000 || i == 50 || i == 500 || i == 5000 || i == 50000 || i == n) {
-            printf("%7d (%5.3lf) %7.0lf (%5.3lf) %7.0lf (%5.3lf) %7.0lf (%5.3lf) %7.0lf (%5.3lf)\n",
+            printf("%7d (%5.3lf) %7.0lf  (%5.3lf)  (%5.3lf)  (%5.3lf) %7.0lf (%5.3lf) %7.0lf (%5.3lf) %7.0lf (%5.3lf)\n",
                  i,(double)i/n,
                  Rels[i],R,
+                 P,F,
                  i-Rels[i],(i-Rels[i])/(n-Rels[n]),
                  Estrel[i],estR,
                  i-Estrel[i],(i-Estrel[i])/(n-Estrel[n]));
@@ -80,7 +95,7 @@ doit(){
 main(){
    while (4 == scanf("%d%*s%*s%lf%*s%d%d",&top,&score,&batch,&rel)) {
       if (top != oldtop) doit();
-      if (batch == 100) b = 1;
+      if      (batch == 100) b = 1;
       else if (batch == 1000) b = 2;
       else if (batch == 10000) b = 3;
       else if (batch == 1000000) b = 4;

@@ -87,7 +87,7 @@ class Email < ActiveRecord::Base
   end
 
   def is_a_forward?
-    (subject[/^fwd: /i]) ? true : false
+    (subject[/^fwd?: /i]) ? true : false
   end
 
   def has_attachment?
