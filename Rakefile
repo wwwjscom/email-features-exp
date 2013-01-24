@@ -10,10 +10,8 @@ namespace :search do
   desc "Query from file"
   task :by_file do
     File.open("queries").each_line do |l|
-      log l
       topic, term = l.chomp.split(":")
       query_for(topic, term)
-      #Rake::Task["search:query_for"].invoke(topic, query)
     end
   end
 
