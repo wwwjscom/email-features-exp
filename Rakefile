@@ -6,6 +6,14 @@ require_relative 'models/email'
 require_relative 'lib/logger'
 DB.connect
 
+namespace :summarize do
+  desc "Aggregate the summary files"
+  task :aggregate do
+    require_relative 'summarize/summarize'
+    Summarize.aggregate_summaries
+  end
+end
+
 namespace :search do
   desc "Query from file"
   task :by_file do
@@ -107,7 +115,7 @@ def query_for(topic, term)
   # Evaluator Code
   require 'date'
   require_relative "eval/evaluator"
-  dir_name = DateTime.now.strftime("%m-%d-%Y_%H:%M:%S__#{topic}__#{term}")
+  dir_name = DateTime.now.strftime("%m-%d-%Y_%H:%M:%S__#{topic}__#{term.gsub(/\W/, '_')}")
   Evaluator.eval(dir_name)
 
   # Summarize

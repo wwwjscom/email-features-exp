@@ -9,9 +9,9 @@ class Search
 
   def self.all_tests(topic, term)
     self.t01(topic, term)
-    #self.t02(topic, term)
-    #self.t03(topic, term)
-    #self.t4_to_tn(topic, term)
+    self.t02(topic, term)
+    self.t03(topic, term)
+    self.t4_to_tn(topic, term)
   end
 
   def self.t01(topic, term)
@@ -83,8 +83,8 @@ class Search
 
     search = Email.search({:page => 1, :per_page => 1000}) do
       query do
-        boosting({:negative_boost => n_boost}) { negative { term n_field.to_sym, n_term } }
-        boosting { positive { term p_field.to_sym, p_term } }
+        boosting({:negative_boost => n_boost}) { negative { text n_field.to_sym, n_term } }
+        boosting { positive { text p_field.to_sym, p_term } }
       end
     end
     search
