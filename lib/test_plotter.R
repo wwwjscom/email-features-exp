@@ -1,12 +1,14 @@
  type <- "f1"
- topic <- "207"
- test_data <- read.table(sprintf("/Users/wwwjscom/Research/Enron-Email-Features-exp/code/summary_for_%s_%s.txt", topic, type), header=T, sep=",")
+ topic <- "206"
+ test_data <- read.table(sprintf("/Users/wwwjscom/Research/Enron-Email-Features-exp/code/results.keep/summary_for_%s_%s.txt", topic, type), header=T, sep=",")
  plot_colors <- c("blue","red","forestgreen", "orange")
- 
- png(filename=sprintf("/Users/wwwjscom/Research/Enron-Email-Features-exp/code/results/graphs/%s_%s.png",topic,type), height=500, width=1000, bg="white")
+
+ ylim <- max(test_data)
+
+ png(filename=sprintf("/Users/wwwjscom/Research/Enron-Email-Features-exp/code/results.keep/graphs/%s/%s_%s.png",type, topic,type), height=500, width=1000, bg="white")
 
  
- plot(test_data$a, type="o", col=plot_colors[1], ylim=c(2,15), xlim=c(1,33))
+ plot(test_data$a, type="o", col=plot_colors[1], ylim=c(0,20), xlim=c(1,33))
  box()
  lines(test_data$b, type="o", pch=22, lty=2, col=plot_colors[2])
  lines(test_data$c, type="o", pch=23, lty=3, col=plot_colors[3])
