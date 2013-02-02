@@ -140,7 +140,7 @@ class Summarize
   def self.write_results(topic, arr, measure)
     File.open("./summary_for_#{topic}_#{measure}.txt", "w") do |f|
       f.puts "test,a,b,c,d"
-      arr.each_with_index { |test, index| next if index == 0; f.puts "%s,%s,%s,%s,%s" % [index, test[0], test[1], test[2], test[3]] }
+      arr.each_with_index { |test, index| next if index < 3; f.puts "%s,%s,%s,%s,%s" % [index, test[0], test[1], test[2], test[3]] }
     end
   end
 end
