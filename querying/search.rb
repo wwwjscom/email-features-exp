@@ -8,8 +8,8 @@ class Search
   attr_accessor :t_num
 
   def self.all_tests(topic, term)
-    self.t01(topic, term)
-    self.t02(topic, term)
+    #self.t01(topic, term)
+    #self.t02(topic, term)
     self.t03(topic, term)
     self.t4_to_tn(topic, term)
   end
@@ -51,6 +51,7 @@ class Search
   # negative or positive boosting
   def self.t4_to_tn(topic, term)
     (4..33).each do |i|
+    #(4..40).each do |i|
       log("Setting up tests t%02d" % i)
       Search.new({
         :negative_term => term,
@@ -83,8 +84,9 @@ class Search
 
     search = Email.search({:page => 1, :per_page => 1000}) do
       query do
-        boosting({:negative_boost => n_boost}) { negative { text n_field.to_sym, n_term } }
-        boosting { positive { text p_field.to_sym, p_term } }
+        match :_all, p_term
+        #boosting({:negative_boost => n_boost}) { negative { text n_field.to_sym, n_term } }
+        #boosting { positive { text p_field.to_sym, p_term } }
       end
     end
     search

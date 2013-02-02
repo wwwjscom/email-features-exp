@@ -1,5 +1,0 @@
-==== Topic 202 ====
-Documents returned     Recall   Precision   F1   Nonrelevant    Estmated Rel   Estimated Non
-     10 (0.476)       0  (  nan)  (0.000)  (  nan)      10 (0.476)      13 (0.725)      -3 (-0.947)
-     20 (0.952)       0  (  nan)  (0.000)  (  nan)      20 (0.952)      18 (0.989)       2 (0.744)
-     21 (1.000)       0  (  nan)  (0.000)  (  nan)      21 (1.000)      18 (1.000)       3 (1.000)

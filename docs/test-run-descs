@@ -112,3 +112,24 @@ t32:
   f(r) = r + 1, if email is a forward
 
 t33: opposite of t32
+
+t34: primary recall features for topic 207
+     primary: 8,16,29
+
+t35: primary recall features for topic 206
+     primary: 26,29
+
+t36: primary recall features for topic 204
+     primary: 9,15,19,22,25,27,29,31,33
+
+t37: primary recall features for topic 201
+     primary: 21
+
+t38: primary f1 features for topic 207
+     primary: 8,10,12,16,28,30
+
+t39: primary f1 features for topic 206
+     primary: 7,11,26,29
+
+t40: primary f1 features for topic 204
+     primary: 9,15

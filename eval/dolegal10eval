@@ -12,7 +12,7 @@
 #   run-file.table
 #   run-file.sum
 
-#gcc -O2 -o /tmp/calc1 ./eval/calc1.c -lm
+gcc -O2 -o /tmp/calc1 ./eval/calc1.c -lm
 #gcc -O2 -o /tmp/calc2 ./eval/calc2.c -lm
 export B=`echo $2 | sed -e 's/.gz//'`
 #(zcat $B.gz || cat $B) | dos2unix | sed -e 's/	/ /g' -e 's/  */ /g' -e 's/ Q0 /:/' | sort > /tmp/pre

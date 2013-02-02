@@ -83,10 +83,12 @@ class Email < ActiveRecord::Base
   end
 
   def is_a_reply?
+    return false unless subject
     (subject[/^re: /i]) ? true : false
   end
 
   def is_a_forward?
+    return false unless subject
     (subject[/^fwd?: /i]) ? true : false
   end
 
@@ -107,10 +109,12 @@ class Email < ActiveRecord::Base
   end
 
   def bytes_in_subject
+    return 0 unless subject
     BytesInSubject.for(subject)
   end
 
   def words_in_subject
+    return 0 unless subject
     WordsInSubject.for(subject)
   end
 end

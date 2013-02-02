@@ -279,6 +279,139 @@ class Reorder
     results
   end
   
+  def self.t34(results)
+    each_result(results) do |r, email|
+      # 29
+      next unless email.received?
+      r[:score] = r[:score].to_f + 1.0
+
+      # 8
+      t8_t9_helper(email) do
+        r[:score] = r[:score].to_f * email.attachments.size
+      end
+
+      # 16
+      t14_t17_helper(email) do |avg, words_in_body|
+        r[:score] = r[:score].to_f + (words_in_body.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t35(results)
+    each_result(results) do |r, email|
+      next unless email.received?
+      next unless (9..17).cover?(email.date_time.hour)
+      r[:score] = r[:score].to_f + 2.0
+    end
+    results
+  end
+
+  def self.t36(results)
+    each_result(results) do |r, email|
+      # 27, 29, 31, 33,
+      next if (9..17).cover?(email.date_time.hour)
+      next unless email.received?
+      next if email.is_a_reply?
+      next if email.is_a_forward?
+      r[:score] = r[:score].to_f + 4.0
+
+      # 9
+      t8_t9_helper(email) do
+        r[:score] = r[:score].to_f / email.attachments.size
+      end
+
+      # 15
+      t14_t17_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+
+      # 19
+      t18_t21_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+
+      # 22, 25
+      t22_t25_helper(email) do |avg, words_in_subject|
+        r[:score] = r[:score].to_f + Math.log(avg)
+        r[:score] = r[:score].to_f - (words_in_subject.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t37(results)
+    each_result(results) do |r, email|
+      # 21
+      t18_t21_helper(email) do |avg, bytes_in_subject|
+        r[:score] = r[:score].to_f - (bytes_in_subject.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+
+  def self.t38(results)
+    each_result(results) do |r, email|
+
+      # 28, 30
+      next unless email.sent?
+      next unless email.is_a_reply?
+      r[:score] = r[:score].to_f + 2.0
+
+      # 8
+      t8_t9_helper(email) do
+        r[:score] = r[:score].to_f * email.attachments.size
+      end
+
+      # 10, 12
+      t10_t13_helper(email) do |avg|
+        r[:score] = r[:score].to_f + Math.log(avg)
+        r[:score] = r[:score].to_f + (email.bytes_in_body.to_f / avg.to_f)
+      end
+
+      # 16
+      t14_t17_helper(email) do |avg, words_in_body|
+        r[:score] = r[:score].to_f + (words_in_body.to_f / avg.to_f)
+      end
+    end
+    results
+  end
+  
+  def self.t39(results)
+    each_result(results) do |r, email|
+      # 26, 29
+      next unless (9..17).cover?(email.date_time.hour)
+      next unless email.received?
+      r[:score] = r[:score].to_f + 2.0
+
+      # 7
+      t6_t7_helper(email) do |total_vol, day_vol|
+        r[:score] = r[:score].to_f + Math.log(day_vol.total.to_f / total_vol.to_f)
+      end
+
+      # 11
+      t10_t13_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+    end
+    results
+  end
+  
+  def self.t40(results)
+    each_result(results) do |r, email|
+      # 9
+      t8_t9_helper(email) do
+        r[:score] = r[:score].to_f / email.attachments.size
+      end
+
+      # 15
+      t14_t17_helper(email) do |avg|
+        r[:score] = r[:score].to_f - Math.log(Math.log(avg))
+      end
+    end
+    results
+  end
+  
   private #---------------
 
   def self.each_result(results, &block)
